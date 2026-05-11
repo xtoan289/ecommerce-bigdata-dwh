@@ -19,7 +19,7 @@ Dự án này tập trung vào việc xây dựng một hệ thống lưu trữ 
 - Định dạng lưu trữ: Apache Parquet.
 
 ## 4. Cây thư mục tạm thời của dự án
-    '''ecommerce-bigdata-dwh/
+```
 ├── data/               # Dữ liệu qua 4 giai đoạn xử lý
 │   ├── raw/            # Dữ liệu gốc (CSV)
 │   ├── bronze/         # Dữ liệu thô (Parquet)
@@ -37,7 +37,7 @@ Dự án này tập trung vào việc xây dựng một hệ thống lưu trữ 
 ├── config.yaml         # Cấu hình hệ thống (Đường dẫn, App Name)
 ├── .gitignore          # Loại bỏ các file nặng khỏi Git
 └── README.md           # Tài liệu hướng dẫn dự án
-'''
+```
 
 
 ## câu lệnh chạy để kiểm tra và xử lý
