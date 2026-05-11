@@ -19,17 +19,28 @@ Dự án này tập trung vào việc xây dựng một hệ thống lưu trữ 
 - Định dạng lưu trữ: Apache Parquet.
 
 ## 4. Cây thư mục tạm thời của dự án
-├── data/               # Chứa dữ liệu qua 3 giai đoạn (Raw, Bronze, Silver, Gold)
-├── src/                # Mã nguồn xử lý
-│   ├── ingestion/      # Nạp dữ liệu từ CSV vào Bronze
-│   ├── transformation/ # Xử lý từ Bronze -> Silver và Silver -> Gold
-│   └── utils/          # Cấu hình Spark Session và các hàm hỗ trợ
-├── config.yaml         # File cấu hình hệ thống (Path, App Name)
+    '''ecommerce-bigdata-dwh/
+├── data/               # Dữ liệu qua 4 giai đoạn xử lý
+│   ├── raw/            # Dữ liệu gốc (CSV)
+│   ├── bronze/         # Dữ liệu thô (Parquet)
+│   ├── silver/         # Dữ liệu sạch, chuẩn hóa kiểu
+│   └── gold/           # Dữ liệu tổng hợp (Fact/Dim)
+├── src/                # Mã nguồn xử lý chính
+│   ├── ingestion/      # Nạp dữ liệu (CSV -> Bronze)
+│   │   └── raw_to_bronze.py
+│   ├── transformation/ # Quy trình biến đổi dữ liệu (ETL)
+│   │   ├── bronze_to_silver.py
+│   │   └── silver_to_gold.py
+│   └── utils/          # Hàm hỗ trợ và cấu hình Spark
+│       ├── spark_session.py
+│       └── helpers.py
+├── config.yaml         # Cấu hình hệ thống (Đường dẫn, App Name)
+├── .gitignore          # Loại bỏ các file nặng khỏi Git
+└── README.md           # Tài liệu hướng dẫn dự án
+'''
 
 
 ## câu lệnh chạy để kiểm tra và xử lý
-
--   chuyển từ ổ C -> ổ E để chạy dự án:  e: cd E:\work\Python\DE_project\ecommerce-bigdata-dwh 
 
 -   chạy ingestion: 
     python src/ingestion/raw_to_bronze.py
