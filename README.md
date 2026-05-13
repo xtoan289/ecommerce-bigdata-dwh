@@ -1,10 +1,12 @@
-# 🛒 Olist E-Commerce Data Warehouse (Big Data)
+# Xây dựng Data Warehouse cho nền tảng thương mại điện tử Olist(Brazil) với Hệ sinh thái Big Data.
 
 ## 1. Giới thiệu về dự án
 Dự án này tập trung vào việc xây dựng một hệ thống kho dữ liệu (Data Warehouse) cho nền tảng thương mại điện tử Olist (Brazil) sử dụng Hệ sinh thái Big Data. 
 Mục tiêu là tự động hóa luồng xử lý dữ liệu để chuyển đổi hàng triệu dòng dữ liệu thô (từ các tệp CSV) thành các bảng dữ liệu tinh gọn, tối ưu, phục vụ cho việc phân tích kinh doanh chuyên sâu như: phân tích doanh thu, hành vi khách hàng, và hiệu suất giao hàng.
 
 ---
+## 1.1 Kiến trúc dữ án
+![alt text](docs/Kien_truc_du_an.png)
 
 ## 2. Cách hoạt động và Kiến trúc dữ liệu
 Dự án được thiết kế theo chuẩn kiến trúc **Medallion Architecture**, sử dụng **Apache Spark** (PySpark) làm động cơ xử lý dữ liệu lớn cốt lõi và **Apache Airflow** để điều phối (orchestration) các luồng công việc tự động.
@@ -21,27 +23,18 @@ Dự án được thiết kế theo chuẩn kiến trúc **Medallion Architectur
 - **Cơ sở dữ liệu Metadata:** PostgreSQL (Dành cho backend của Airflow).
 - **Triển khai & Ảo hóa:** Docker & Docker Compose.
 
----
-
 ## 3. Cấu trúc thư mục của dự án
 
 Dưới đây là cấu trúc thư mục chi tiết để bạn dễ dàng nắm bắt mã nguồn:
 
-```text
-ecommerce-bigdata-dwh/
-├── config.yaml                     # File cấu hình đường dẫn và thông số hệ thống
-├── docker-compose.yaml             # Cấu hình các dịch vụ Docker (Airflow, Postgres)
-├── Dockerfile                      # File build Docker Image (chứa Airflow + PySpark)
-├── requirements.txt                # Danh sách các thư viện Python cần thiết
-├── README.md                       # Tài liệu chính của dự án
-├── .gitignore                      # File cấu hình Git bỏ qua các file không cần thiết
+```
 │
 ├── dags/                           # Thư mục chứa các kịch bản DAG của Airflow
 │   └── olist_ecommerce_pipeline.py # Định nghĩa pipeline ETL (Raw -> Bronze -> Silver -> Gold)
 │
-├── dashboards/                     # Thư mục dành cho các file báo cáo PowerBI/Tableau
+├── dashboards/                     # Thư mục (hiện tại trống) dành cho các file báo cáo PowerBI/Tableau
 │
-├── data/                           # Thư mục chứa dữ liệu qua 4 giai đoạn xử lý
+├── data/                           # Thư mục chứa dữ liệu qua 4 giai đoạn xử lý (Medallion)
 │   ├── raw/                        # Chứa file CSV gốc tải từ Kaggle
 │   ├── bronze/                     # Dữ liệu thô đã chuyển sang định dạng Parquet
 │   ├── silver/                     # Dữ liệu đã được làm sạch và chuẩn hóa kiểu
@@ -50,27 +43,35 @@ ecommerce-bigdata-dwh/
 ├── docs/                           # Thư mục tài liệu bổ trợ
 │   └── data_dictionary.md          # Từ điển mô tả chi tiết các trường dữ liệu
 │
-├── notebooks/                      # Thư mục dành cho Jupyter Notebook EDA/Testing
+├── notebooks/                      # Thư mục (hiện tại trống) dành cho Jupyter Notebook EDA/Testing
 │
 ├── sql/                            # Thư mục chứa các file truy vấn và định nghĩa SQL
 │   ├── analytical_queries.sql      # Các câu truy vấn SQL mẫu để phân tích kinh doanh
-│   └── ddl_star_schema.sql         # Câu lệnh tạo bảng (DDL) cho Star Schema
+│   └── ddl_star_schema.sql         # Câu lệnh tạo bảng (DDL) cho Star Schema (nếu đưa lên Database)
 │
 └── src/                            # Mã nguồn chính của dự án bằng PySpark
-    ├── __init__.py
-    ├── ingestion/                  # Quy trình nạp dữ liệu vào hệ thống
-    │   ├── __init__.py
-    │   └── raw_to_bronze.py        # Đọc CSV (Raw) và lưu lại thành Parquet (Bronze)
-    ├── transformation/             # Quy trình làm sạch và chuyển đổi (ETL)
-    │   ├── __init__.py
-    │   ├── bronze_to_silver.py     # Làm sạch dữ liệu, loại bỏ Null/Duplicate
-    │   └── silver_to_gold.py       # Join dữ liệu, tạo bảng Fact và Dimension
-    └── utils/                      # Chứa các hàm dùng chung và tiện ích
-        ├── __init__.py
-        └── spark_session.py        # Hàm khởi tạo và cấu hình Apache Spark Session
+|   ├── __init__.py
+|   │
+|   ├── ingestion/                  # Quy trình nạp dữ liệu vào hệ thống
+|   │   ├── __init__.py
+|   │   └── raw_to_bronze.py        # Đọc CSV (Raw) và lưu lại thành Parquet (Bronze)
+|   │
+|   ├── transformation/             # Quy trình làm sạch và chuyển đổi (ETL)
+|   │   ├── __init__.py
+|   │   ├── bronze_to_silver.py     # Làm sạch dữ liệu, loại bỏ Null/Duplicate (Bronze -> Silver)
+|   │   └── silver_to_gold.py       # Join dữ liệu, tạo bảng Fact và Dimension (Silver -> Gold)
+|   │
+|   └── utils/                      # Chứa các hàm dùng chung và tiện ích
+|       ├── __init__.py
+|       └── spark_session.py        # Hàm khởi tạo và cấu hình Apache Spark Session
+├── config.yaml                     # File cấu hình đường dẫn và thông số hệ thống
+├── docker-compose.yaml             # Cấu hình các dịch vụ Docker (Airflow, Postgres)
+├── Dockerfile                      # File build Docker Image (chứa Airflow + PySpark)
+├── requirements.txt                # Danh sách các thư viện Python cần thiết
+├── README.md                       # Tài liệu chính của dự án
+├── .gitignore                      # File cấu hình Git bỏ qua các file không cần thiết
+├── .git/                           # (Thư mục ẩn của Git)
 ```
-
----
 
 ## 4. Hướng Dẫn Cài Đặt Và Chạy Dự Án (Dành Cho Người Mới)
 
@@ -79,19 +80,18 @@ Dự án này sử dụng **Docker** để tự động hóa việc cài đặt 
 ### BƯỚC 1: Chuẩn bị công cụ và mã nguồn
 
 **1. Cài đặt Docker Desktop (Bắt buộc):**
-- Tải và cài đặt Docker Desktop tại: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+- Tải và cài đặt Docker Desktop
 - Khởi động Docker Desktop và chắc chắn rằng icon Docker ở góc phải màn hình báo trạng thái **"Engine running"** (màu xanh).
 
 **2. Cài đặt Git:**
-- Tải và cài đặt Git tại: [https://git-scm.com/](https://git-scm.com/)
+- Tải và cài đặt Git
 
 **3. Tải mã nguồn dự án về máy:**
 Mở Terminal (Mac/Linux) hoặc Command Prompt / PowerShell (Windows) và chạy lệnh:
 ```bash
-git clone <Đường_link_Github_của_dự_án>
+git clone https://github.com/xtoan289/ecommerce-bigdata-dwh.git
 cd ecommerce-bigdata-dwh
 ```
-*(Lưu ý: Thay `<Đường_link_Github_của_dự_án>` bằng link repository thực tế của bạn).*
 
 ### BƯỚC 2: Chuẩn bị dữ liệu thô (Raw Data)
 Do dữ liệu gốc khá nặng nên sẽ không được đẩy lên Github. Bạn cần tải file dữ liệu thủ công:
