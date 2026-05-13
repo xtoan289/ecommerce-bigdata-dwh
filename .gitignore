@@ -1,0 +1,18 @@
+# Không đẩy dữ liệu lên vì rất nặng
+data/
+
+# Không đẩy cấu hình cá nhân (nếu có mật khẩu)
+config.yaml
+
+# Không đẩy file rác của Python
+__pycache__/
+*.pyc
+
+# Bỏ qua toàn bộ nội dung trong folder data ngoại trừ các file .gitkeep
+data/**/*
+!data/**/.gitkeep
+
+# Bỏ qua các file dữ liệu cụ thể nếu chúng nằm ngoài folder data
+*.csv
+*.parquet
+*.json
