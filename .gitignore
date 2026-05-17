@@ -1,6 +1,3 @@
-# Không đẩy dữ liệu lên vì rất nặng
-data/
-
 # Không đẩy cấu hình cá nhân (nếu có mật khẩu)
 config.yaml
 
