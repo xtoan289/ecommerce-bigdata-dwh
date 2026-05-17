@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: ecommerce_postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    ports:
+      - "5432:5432"
+
+  airflow-webserver:
+    container_name: airflow_webserver
+    hostname: airflow-webserver
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=toan_student_2026
+      - AIRFLOW__LOGGING__LOG_FETCHING_TIMEOUT=30
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./requirements.txt:/requirements.txt
+      - ./config.yaml:/opt/airflow/config.yaml
+      - ./data:/opt/airflow/data
+    command: webserver
+
+  airflow-scheduler:
+    build: .
+    container_name: airflow_scheduler
+    hostname: airflow-scheduler
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=toan_student_2026
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./requirements.txt:/requirements.txt
+      - ./config.yaml:/opt/airflow/config.yaml
+      - ./data:/opt/airflow/data
+    command: scheduler
