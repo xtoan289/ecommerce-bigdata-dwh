@@ -26,14 +26,23 @@ with DAG(
     task_raw_to_bronze = BashOperator(
         task_id='raw_to_bronze',
         # Duong dan trong Docker bat dau tu /opt/airflow/src
-        bash_command='python /opt/airflow/src/ingestion/raw_to_bronze.py',
+        bash_command='export PYTHONPATH=/opt/airflow && python src/ingestion/raw_to_bronze.py',
+        cwd='/opt/airflow',
     )
 
     # Bước 2: Transformation (Loc du lieu va luu vao Silver)
     task_bronze_to_silver = BashOperator(
         task_id='bronze_to_silver',
-        bash_command='python /opt/airflow/src/transformation/bronze_to_silver.py',
+        bash_command='export PYTHONPATH=/opt/airflow && python src/transformation/bronze_to_silver.py',
+        cwd='/opt/airflow',
     )
 
-    # Thiet lap thu tu: Task 1 chay xong moi den Task 2
-    task_raw_to_bronze >> task_bronze_to_silver
+    # Bước 3: Đẩy vào Postgres (Silver to Gold)
+    task_silver_to_gold = BashOperator(
+        task_id='silver_to_gold',
+        bash_command='export PYTHONPATH=/opt/airflow && python src/transformation/silver_to_gold.py',
+        cwd='/opt/airflow',
+    )
+
+    # Thiet lap thu tu: Task 1 -> Task 2 -> Task 3
+    task_raw_to_bronze >> task_bronze_to_silver >> task_silver_to_gold
