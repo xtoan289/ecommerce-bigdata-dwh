@@ -1,0 +1,20 @@
+spark_config:
+    app_name: "Olist_Ecommerce_DWH"
+    warehouse_dir: "spark-warehouse"
+    spark_home: "D:/DE/spark-3.5.3-bin-hadoop3/spark-3.5.3-bin-hadoop3"
+    java_home: "C:/Program Files/Eclipse Adoptium/jdk-11.0.31.11-hotspot"
+    hadoop_home: "D:/DE/hadoop-3.3.6"
+# Paths (Using forward slashes for PySpark/Windows compatibility)
+data_paths:
+  raw: "data/raw"
+  bronze: "data/bronze"
+  silver: "data/silver"
+  gold: "data/gold"
+
+# File Names
+# file_names:
+#     customers: "olist_customers_dataset.csv"
+#     geolocation: "olist_geolocation_dataset.csv"
+#     orders: "olist_orders_dataset.csv"
+#     order_items: "olist_order_items_dataset.csv"
+#     products: "olist_products_dataset.csv"
