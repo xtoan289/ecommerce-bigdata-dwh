@@ -5,7 +5,7 @@ Dự án này tập trung vào việc xây dựng một hệ thống kho dữ li
 Mục tiêu là tự động hóa luồng xử lý dữ liệu để chuyển đổi hàng triệu dòng dữ liệu thô (từ các tệp CSV) thành các bảng dữ liệu tinh gọn, tối ưu, phục vụ cho việc phân tích kinh doanh chuyên sâu như: phân tích doanh thu, hành vi khách hàng, và hiệu suất giao hàng.
 
 ---
-## 1.1 Kiến trúc dữ án
+## 1.1 Kiến trúc dự án
 ![alt text](docs/Kien_truc_du_an.png)
 
 ## 2. Cách hoạt động và Kiến trúc dữ liệu
